@@ -27,7 +27,7 @@ app.use(methodOverride("_method"));
 app.engine('ejs', ejsMate);
 app.use(express.static(path.join(__dirname, "/public")));
 
-const dbUrl = process.env.ATLASDB_URL;
+const mongoUrl = process.env.ATLASDB_URL;
 
 main().then((res) => {
     console.log("Connected to DB");
@@ -36,28 +36,28 @@ main().then((res) => {
 });
 
 async function main() {
-    await mongoose.connect(dbUrl);
+    await mongoose.connect(mongoUrl);
 }
 
 const sessionStore = MongoStore.create({
-    mongoUrl: dbUrl,
+    mongoUrl,
     crypto: {
         secret: process.env.SECRET,
     },
     touchAfter: 24*60*60
 });
 
-sessionStore.on("error", () => {
+sessionStore.on("error", (err) => {
     console.log("ERROR in Mongo Session Store", err);
 });
 
 const sessionOptions = {
-    sessionStore,
+    store: sessionStore,
     secret: process.env.SECRET,
     resave: false,
     saveUninitialized: true,
     cookie: {
-        expires: Date.now() + 7*24*60*60*100,
+        expires: Date.now() + 7*24*60*60*1000,
         maxAge: 7*24*60*60*100,
         httpOnly: true 
     }
