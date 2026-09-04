@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Amor is a web application inspired by Airbnb, providing a platform for users to find and book accommodations around the world. 
+Amor is a web application, providing a platform for users to find and book accommodations around the world. 
 
 ## Features
 
